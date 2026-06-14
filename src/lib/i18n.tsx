@@ -130,6 +130,29 @@ const STRINGS = {
   printDate: { bn: "প্রিন্টের তারিখ", en: "Generated" },
   language: { bn: "ভাষা", en: "Language" },
   checklistHeader: { bn: "ডকুমেন্ট চেকলিস্ট", en: "Document Checklist" },
+
+  // Continue / Dashboard
+  continueTitle: { bn: "যেখানে রেখেছিলেন", en: "Continue where you left off" },
+  continueSub: { bn: "আপনার সংরক্ষিত অগ্রগতি", en: "Your saved checklists" },
+  continueEmpty: { bn: "এখনো কোনো অগ্রগতি নেই — একটি দেশ নির্বাচন করুন।", en: "No saved progress yet — pick a country to begin." },
+  resume: { bn: "চালিয়ে যান", en: "Resume" },
+
+  // Featured slider
+  featured: { bn: "ফিচারড গন্তব্য", en: "Featured destinations" },
+
+  // Contact / FAQ
+  contactTitle: { bn: "আমাদের সাথে কথা বলুন", en: "Talk to a visa specialist" },
+  contactSub: { bn: "আপনার ফাইল প্রস্তুতি, ডকুমেন্ট পর্যালোচনা ও এম্বাসি অ্যাপয়েন্টমেন্টে সহায়তা।", en: "We help with file prep, document review and embassy appointment guidance." },
+  faqTitle: { bn: "প্রায়শই জিজ্ঞাসিত প্রশ্ন", en: "Frequently asked questions" },
+  faq1Q: { bn: "এটি কি সরকারি ওয়েবসাইট?", en: "Is this an official government website?" },
+  faq1A: { bn: "না, এটি একটি বেসরকারি পরামর্শক তথ্য টুল। অফিসিয়াল লিংক যাচাই করুন।", en: "No — this is an independent consultancy tool. Always verify with official embassy links." },
+  faq2Q: { bn: "চেকলিস্ট কতটা নির্ভুল?", en: "How accurate are the checklists?" },
+  faq2A: { bn: "নিয়মিত আপডেট হয়, তবে এম্বাসি ও কেস অনুযায়ী পার্থক্য থাকতে পারে।", en: "We update regularly, but requirements vary by embassy and individual case." },
+  faq3Q: { bn: "আমার ডেটা কোথায় সংরক্ষিত হয়?", en: "Where is my data stored?" },
+  faq3A: { bn: "শুধু আপনার ডিভাইসে (লোকাল স্টোরেজ)। কোনো সার্ভারে পাঠানো হয় না।", en: "Only on your device (localStorage). Nothing is sent to a server." },
+  faq4Q: { bn: "কনসালটেশন ফি কত?", en: "How much is a consultation?" },
+  faq4A: { bn: "প্রথম পরিচিতি সেশন বিনামূল্যে। ফাইল রিভিউয়ের জন্য কাস্টম কোট দেওয়া হয়।", en: "First intro session is free. Custom quote for full file review." },
+  backHome: { bn: "হোমে ফিরে যান", en: "Back to home" },
 } as const;
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
