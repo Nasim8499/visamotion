@@ -9,11 +9,12 @@ interface HeroProps {
 }
 
 const services = [
-  { id: "work", icon: Briefcase, key: "workVisa", tone: "from-[#0F766E] to-[#14B8A6]" },
-  { id: "visit", icon: MapPin, key: "visitVisa", tone: "from-[#0D3B66] to-[#1e5a8a]" },
-  { id: "business", icon: Building2, key: "businessVisa", tone: "from-[#9b4423] to-[#d4842a]" },
-  { id: "trc", icon: IdCard, key: "trcCard", tone: "from-[#4f46e5] to-[#818cf8]" },
+  { id: "work", icon: Briefcase, key: "workVisa", tone: "from-[#0F766E] via-[#14B8A6] to-[#5cbdb9]", shadow: "shadow-[0_18px_40px_-18px_rgba(15,118,110,0.65)]" },
+  { id: "visit", icon: MapPin, key: "visitVisa", tone: "from-[#0D3B66] via-[#1e5a8a] to-[#3b6fa0]", shadow: "shadow-[0_18px_40px_-18px_rgba(13,59,102,0.7)]" },
+  { id: "business", icon: Building2, key: "businessVisa", tone: "from-[#9b4423] via-[#d4842a] to-[#e8b84a]", shadow: "shadow-[0_18px_40px_-18px_rgba(212,132,42,0.6)]" },
+  { id: "trc", icon: IdCard, key: "trcCard", tone: "from-[#4f46e5] via-[#6366f1] to-[#a78bfa]", shadow: "shadow-[0_18px_40px_-18px_rgba(79,70,229,0.6)]" },
 ] as const;
+
 
 export function Hero({ query, setQuery, onCta }: HeroProps) {
   const { t, lang } = useLanguage();
@@ -111,25 +112,35 @@ export function Hero({ query, setQuery, onCta }: HeroProps) {
           </button>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {services.map((s) => (
+          {services.map((s, i) => (
             <button
               key={s.id}
               onClick={onCta}
-              className="group relative overflow-hidden rounded-2xl bg-white p-4 text-left shadow-card ring-1 ring-border transition hover:-translate-y-0.5 hover:shadow-lift"
+              style={{ animation: `fade-up 500ms ${i * 80}ms cubic-bezier(0.22,1,0.36,1) both` }}
+              className={`group relative aspect-square overflow-hidden rounded-3xl bg-gradient-to-br ${s.tone} p-4 text-left text-white ring-1 ring-white/20 ${s.shadow} transition-all duration-300 hover:-translate-y-1 hover:shadow-lift`}
             >
-              <div className={`mb-3 grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br ${s.tone} text-white shadow-soft`}>
-                <s.icon className="h-5 w-5" strokeWidth={2.3} />
+              {/* Highlight + ambient */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/10" />
+              <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition group-hover:scale-150" />
+              <div className="pointer-events-none absolute -bottom-10 -left-8 h-24 w-24 rounded-full bg-black/10 blur-2xl" />
+
+              <div className="relative flex h-full flex-col justify-between">
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+                  <s.icon className="h-5 w-5" strokeWidth={2.4} />
+                </div>
+                <div>
+                  <div className={`text-[14px] font-bold leading-tight drop-shadow ${lang === "bn" ? "font-bn" : ""}`}>
+                    {t(s.key as any)}
+                  </div>
+                  <div className="mt-0.5 text-[10.5px] font-semibold uppercase tracking-wider text-white/80">
+                    {COUNTRIES.length} {lang === "bn" ? "দেশ" : "countries"}
+                  </div>
+                </div>
               </div>
-              <div className={`text-[13.5px] font-bold leading-tight text-primary ${lang === "bn" ? "font-bn" : ""}`}>
-                {t(s.key as any)}
-              </div>
-              <div className="mt-1 text-[10.5px] uppercase tracking-wider text-muted-foreground">
-                {COUNTRIES.length} {lang === "bn" ? "দেশ" : "countries"}
-              </div>
-              <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full bg-gradient-to-br from-black/0 to-black/[0.03] transition group-hover:scale-125" />
             </button>
           ))}
         </div>
+
       </div>
     </section>
   );
