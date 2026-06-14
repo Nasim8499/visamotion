@@ -1,16 +1,57 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect, useState } from "react";
+import { LanguageProvider, HAS_LANG_KEY } from "@/lib/i18n";
+import { SplashScreen } from "@/components/SplashScreen";
+import { AppHeader } from "@/components/AppHeader";
+import { Hero } from "@/components/Hero";
+import { StatCards } from "@/components/StatCards";
+import { CountryGrid } from "@/components/CountryGrid";
+import { ConsultationCTA } from "@/components/ConsultationCTA";
+import { Footer } from "@/components/Footer";
+import { CountryDetail } from "@/components/CountryDetail";
+import type { Country } from "@/data/countries";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+function VisaMotionApp() {
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return !localStorage.getItem(HAS_LANG_KEY);
+  });
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<Country | null>(null);
+
+  useEffect(() => {
+    if (selected) window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [selected]);
+
+  if (showSplash) return <SplashScreen onContinue={() => setShowSplash(false)} />;
+
+  if (selected) {
+    return (
+      <div className="min-h-screen bg-background">
+        <AppHeader onHome={() => setSelected(null)} />
+        <CountryDetail country={selected} onBack={() => setSelected(null)} />
+        <Footer />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      <AppHeader onHome={() => setSelected(null)} />
+      <Hero query={query} setQuery={setQuery} onCta={() => {
+        document.getElementById("countries")?.scrollIntoView({ behavior: "smooth" });
+      }} />
+      <StatCards />
+      <CountryGrid query={query} setQuery={setQuery} onSelect={setSelected} />
+      <ConsultationCTA />
+      <Footer />
     </div>
   );
-};
+}
 
-const Index = PlaceholderIndex;
-
-export default Index;
+export default function Index() {
+  return (
+    <LanguageProvider>
+      <VisaMotionApp />
+    </LanguageProvider>
+  );
+}
