@@ -10,7 +10,7 @@ export function AppHeader({ onHome }: AppHeaderProps) {
   const { lang, setLang, t } = useLanguage();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-white/85 backdrop-blur-xl no-print">
+    <header className="sticky top-0 z-40 hidden border-b border-border/60 bg-white/85 backdrop-blur-xl no-print md:block">
       <div className="container flex h-16 items-center justify-between">
         <button onClick={onHome} className="flex items-center gap-2 transition-smooth hover:opacity-80">
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-teal-gradient shadow-soft">
@@ -21,7 +21,6 @@ export function AppHeader({ onHome }: AppHeaderProps) {
 
         <nav className="hidden items-center gap-6 md:flex">
           <a href="#countries" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-primary">{t("countries")}</a>
-          <a href="#categories" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-primary">{t("categories")}</a>
           <a href="#consult" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-primary">{t("contact")}</a>
         </nav>
 

@@ -4,10 +4,10 @@ import { HAS_LANG_KEY } from "@/lib/i18n";
 import { SplashScreen } from "@/components/SplashScreen";
 import { AppHeader } from "@/components/AppHeader";
 import { Hero } from "@/components/Hero";
-import { StatCards } from "@/components/StatCards";
 import { CountryGrid } from "@/components/CountryGrid";
 import { ConsultationCTA } from "@/components/ConsultationCTA";
 import { Footer } from "@/components/Footer";
+import { BottomNav } from "@/components/BottomNav";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -27,10 +27,10 @@ export default function Index() {
       <Hero query={query} setQuery={setQuery} onCta={() => {
         document.getElementById("countries")?.scrollIntoView({ behavior: "smooth" });
       }} />
-      <StatCards />
       <CountryGrid query={query} setQuery={setQuery} onSelect={(c) => navigate(`/country/${c.slug}/work`)} />
       <ConsultationCTA />
       <Footer />
+      <BottomNav />
     </div>
   );
 }
