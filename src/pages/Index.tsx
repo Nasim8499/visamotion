@@ -4,6 +4,8 @@ import { HAS_LANG_KEY } from "@/lib/i18n";
 import { SplashScreen } from "@/components/SplashScreen";
 import { AppHeader } from "@/components/AppHeader";
 import { Hero } from "@/components/Hero";
+import { HeroSlider } from "@/components/HeroSlider";
+import { ContinueProgress } from "@/components/ContinueProgress";
 import { CountryGrid } from "@/components/CountryGrid";
 import { ConsultationCTA } from "@/components/ConsultationCTA";
 import { Footer } from "@/components/Footer";
@@ -24,11 +26,15 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader onHome={() => navigate("/")} />
-      <Hero query={query} setQuery={setQuery} onCta={() => {
-        document.getElementById("countries")?.scrollIntoView({ behavior: "smooth" });
-      }} />
-      <CountryGrid query={query} setQuery={setQuery} onSelect={(c) => navigate(`/country/${c.slug}/work`)} />
-      <ConsultationCTA />
+      <main id="main">
+        <Hero query={query} setQuery={setQuery} onCta={() => {
+          document.getElementById("countries")?.scrollIntoView({ behavior: "smooth" });
+        }} />
+        <ContinueProgress />
+        <HeroSlider />
+        <CountryGrid query={query} setQuery={setQuery} onSelect={(c) => navigate(`/country/${c.slug}/work`)} />
+        <ConsultationCTA />
+      </main>
       <Footer />
       <BottomNav />
     </div>

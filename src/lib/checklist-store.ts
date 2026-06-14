@@ -8,6 +8,37 @@ function read(): Store {
   if (typeof window === "undefined") return {};
   try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { return {}; }
 }
+
+export interface ProgressEntry {
+  countryId: string;
+  category: "work" | "visit" | "business" | "trc";
+  completed: number;
+  total: number;
+  percent: number;
+  lastUpdated?: number;
+}
+
+export function getAllProgress(totals: (id: string, cat: ProgressEntry["category"]) => number): ProgressEntry[] {
+  const s = read();
+  const out: ProgressEntry[] = [];
+  for (const countryId of Object.keys(s)) {
+    const entries = s[countryId];
+    const seenCats = new Set<ProgressEntry["category"]>();
+    for (const k of Object.keys(entries)) {
+      const [cat] = k.split(":");
+      if (["work","visit","business","trc"].includes(cat)) seenCats.add(cat as ProgressEntry["category"]);
+    }
+    for (const cat of seenCats) {
+      const total = totals(countryId, cat);
+      if (!total) continue;
+      let completed = 0;
+      for (let i = 0; i < total; i++) if (entries[`${cat}:${i}`]) completed++;
+      if (completed === 0) continue;
+      out.push({ countryId, category: cat, completed, total, percent: Math.round((completed/total)*100) });
+    }
+  }
+  return out.sort((a,b) => b.percent - a.percent);
+}
 function write(s: Store) {
   localStorage.setItem(KEY, JSON.stringify(s));
 }
