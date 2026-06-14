@@ -44,6 +44,7 @@ export default function Index() {
       </main>
       <Footer />
       <BottomNav />
+      <InstallAppPrompt />
     </div>
   );
 }
