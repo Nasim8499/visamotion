@@ -1,24 +1,35 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Check, Copy, Printer, Download, Share2, TrendingUp, Clock, IdCard, AlertCircle, Languages, Shield, CalendarCheck2, Star } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import type { Country, BiText } from "@/data/countries";
 import { useChecklistStore } from "@/lib/checklist-store";
+import { getOverrides } from "@/lib/links-store";
 import { Button } from "@/components/ui/button";
 import { OfficialLinks } from "./OfficialLinks";
 import { ProcessingTimeline } from "./ProcessingTimeline";
+import { ConsultationCTA } from "./ConsultationCTA";
+import { PrintableChecklist } from "./PrintableChecklist";
 import { toast } from "sonner";
 
 type Category = "work" | "visit" | "business" | "trc";
 
 interface Props {
   country: Country;
+  category: Category;
   onBack: () => void;
+  onCategoryChange: (c: Category) => void;
 }
 
-export function CountryDetail({ country, onBack }: Props) {
+export function CountryDetail({ country, category, onBack, onCategoryChange }: Props) {
   const { t, tx, lang } = useLanguage();
-  const [category, setCategory] = useState<Category>("work");
   const [imgError, setImgError] = useState(false);
+  const [linksVersion, setLinksVersion] = useState(0);
+
+  useEffect(() => {
+    const h = () => setLinksVersion((v) => v + 1);
+    window.addEventListener("visamotion:links-updated", h);
+    return () => window.removeEventListener("visamotion:links-updated", h);
+  }, []);
 
   const tabs: { id: Category; label: string }[] = [
     { id: "work", label: t("workVisa") },
@@ -30,34 +41,46 @@ export function CountryDetail({ country, onBack }: Props) {
   const items: BiText[] = useMemo(() => country[category], [country, category]);
   const { state, toggle, completed, total, percent } = useChecklistStore(country.id, category, items.length);
 
+  const overrides = (void linksVersion, getOverrides(country.id));
+  const merged = {
+    embassy: country.links.embassy,
+    officialVisa: overrides.officialVisa ?? country.links.officialVisa,
+    appointment: overrides.appointment ?? country.links.appointment,
+  };
+
   const handleCopy = async () => {
     const header = `${tx(country.name)} — ${tabs.find(x=>x.id===category)?.label}\n${"=".repeat(40)}\n\n`;
     const body = items.map((it, i) => `${i + 1}. ${state[i] ? "[x]" : "[ ]"} ${tx(it)}`).join("\n");
+    const footer = `\n\n${t("officialLinks")}\n- ${t("embassyWebsite")}: ${merged.embassy || "—"}\n- ${t("officialVisaInfo")}: ${merged.officialVisa || "—"}\n- ${t("appointmentPortal")}: ${merged.appointment || "—"}`;
     try {
-      await navigator.clipboard.writeText(header + body);
+      await navigator.clipboard.writeText(header + body + footer);
       toast.success(t("copied"));
     } catch {
       toast.error("Copy failed");
     }
   };
 
-  const handlePrint = () => window.print();
+  const handlePrint = () => {
+    document.body.classList.add("printing");
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => document.body.classList.remove("printing"), 100);
+    }, 50);
+  };
 
   const handleShare = async () => {
     const url = window.location.href;
     const text = `${tx(country.name)} — Visa Motion`;
     if (navigator.share) {
-      try { await navigator.share({ title: text, url }); } catch {}
-    } else {
-      navigator.clipboard.writeText(url);
-      toast.success(t("copied"));
+      try { await navigator.share({ title: text, url }); return; } catch {}
     }
+    try { await navigator.clipboard.writeText(url); toast.success(t("copied")); } catch {}
   };
 
   return (
     <div className="bg-surface min-h-screen">
       {/* Hero header */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden no-print">
         <div className="absolute inset-0 -z-10">
           {imgError ? (
             <div className="absolute inset-0 bg-card-fallback" />
@@ -68,7 +91,7 @@ export function CountryDetail({ country, onBack }: Props) {
         </div>
 
         <div className="container relative pb-16 pt-8 text-primary-foreground md:pb-24 md:pt-12">
-          <button onClick={onBack} className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium text-white backdrop-blur transition-smooth hover:bg-white/25 no-print">
+          <button onClick={onBack} className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium text-white backdrop-blur transition-smooth hover:bg-white/25">
             <ArrowLeft className="h-4 w-4" /> {t("back")}
           </button>
 
@@ -95,16 +118,17 @@ export function CountryDetail({ country, onBack }: Props) {
         </div>
       </section>
 
-      <div className="container -mt-8 grid gap-8 pb-16 lg:grid-cols-3 print-container">
-        {/* Main column */}
+      <div className="container -mt-8 grid gap-8 pb-16 lg:grid-cols-3 no-print">
         <div className="space-y-8 lg:col-span-2">
-          {/* Tabs + checklist card */}
-          <div className="rounded-3xl border border-border bg-card shadow-card print-card">
-            <div className="flex flex-wrap gap-1 border-b border-border p-2 no-print">
+          {/* Tabs + checklist */}
+          <div className="rounded-3xl border border-border bg-card shadow-card">
+            <div className="flex flex-wrap gap-1 border-b border-border p-2" role="tablist">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setCategory(tab.id)}
+                  role="tab"
+                  aria-selected={category === tab.id}
+                  onClick={() => onCategoryChange(tab.id)}
                   className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-semibold transition-smooth min-w-[120px] ${
                     category === tab.id
                       ? "bg-primary text-primary-foreground shadow-soft"
@@ -115,7 +139,6 @@ export function CountryDetail({ country, onBack }: Props) {
             </div>
 
             <div className="p-6 md:p-8">
-              {/* Progress */}
               <div className="mb-6 rounded-2xl bg-secondary/50 p-4">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                   <div className="text-sm font-semibold text-primary">
@@ -126,10 +149,7 @@ export function CountryDetail({ country, onBack }: Props) {
                   </div>
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-border">
-                  <div
-                    className="h-full rounded-full bg-teal-gradient transition-smooth"
-                    style={{ width: `${percent}%` }}
-                  />
+                  <div className="h-full rounded-full bg-teal-gradient transition-smooth" style={{ width: `${percent}%` }} />
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground md:grid-cols-3">
                   <span>{t("documentsTotal")}: <b className="text-primary">{total}</b></span>
@@ -137,24 +157,20 @@ export function CountryDetail({ country, onBack }: Props) {
                 </div>
               </div>
 
-              {/* Action buttons */}
-              <div className="mb-6 flex flex-wrap gap-2 no-print">
+              <div className="mb-6 flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" onClick={handleCopy} className="rounded-xl"><Copy className="mr-1.5 h-3.5 w-3.5" /> {t("copyChecklist")}</Button>
                 <Button size="sm" variant="outline" onClick={handlePrint} className="rounded-xl"><Printer className="mr-1.5 h-3.5 w-3.5" /> {t("print")}</Button>
                 <Button size="sm" variant="outline" onClick={handlePrint} className="rounded-xl"><Download className="mr-1.5 h-3.5 w-3.5" /> {t("downloadPdf")}</Button>
                 <Button size="sm" variant="outline" onClick={handleShare} className="rounded-xl"><Share2 className="mr-1.5 h-3.5 w-3.5" /> {t("share")}</Button>
               </div>
 
-              {/* Checklist items */}
               <ul className="space-y-2.5">
                 {items.map((item, i) => (
                   <li key={i}>
                     <button
                       onClick={() => toggle(i)}
                       className={`group flex w-full items-start gap-3 rounded-2xl border p-4 text-left transition-smooth ${
-                        state[i]
-                          ? "border-emerald/30 bg-emerald/5"
-                          : "border-border bg-card hover:border-accent/30 hover:bg-secondary/40"
+                        state[i] ? "border-emerald/30 bg-emerald/5" : "border-border bg-card hover:border-accent/30 hover:bg-secondary/40"
                       }`}
                     >
                       <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg text-xs font-bold transition-smooth ${
@@ -172,10 +188,8 @@ export function CountryDetail({ country, onBack }: Props) {
             </div>
           </div>
 
-          {/* Timeline */}
           <ProcessingTimeline />
 
-          {/* Important notes */}
           <div className="grid gap-4 md:grid-cols-2">
             <InfoCard icon={AlertCircle} title={t("importantNotes")} tone="amber">
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -199,13 +213,15 @@ export function CountryDetail({ country, onBack }: Props) {
           </div>
         </div>
 
-        {/* Sidebar */}
         <aside className="space-y-6">
           <OfficialLinks country={country} />
         </aside>
       </div>
 
-      <ConsultationCTAInline />
+      <div className="no-print"><ConsultationCTA /></div>
+
+      {/* Print-only A4 layout */}
+      <PrintableChecklist country={country} category={category} items={items} state={state} merged={merged} />
     </div>
   );
 }
@@ -240,7 +256,3 @@ function InfoCard({ icon: Icon, title, tone, children }: { icon: any; title: str
     </div>
   );
 }
-
-// Inline consultation re-used inside detail
-import { ConsultationCTA } from "./ConsultationCTA";
-function ConsultationCTAInline() { return <ConsultationCTA />; }
