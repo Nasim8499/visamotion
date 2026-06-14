@@ -11,6 +11,7 @@ import { CountryGrid } from "@/components/CountryGrid";
 import { ConsultationCTA } from "@/components/ConsultationCTA";
 import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/BottomNav";
+import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export default function Index() {
       </main>
       <Footer />
       <BottomNav />
+      <InstallAppPrompt />
     </div>
   );
 }
