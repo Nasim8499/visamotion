@@ -141,7 +141,6 @@ const STRINGS = {
   featured: { bn: "ফিচারড গন্তব্য", en: "Featured destinations" },
 
   // Contact / FAQ
-  contact: { bn: "যোগাযোগ", en: "Contact" },
   contactTitle: { bn: "আমাদের সাথে কথা বলুন", en: "Talk to a visa specialist" },
   contactSub: { bn: "আপনার ফাইল প্রস্তুতি, ডকুমেন্ট পর্যালোচনা ও এম্বাসি অ্যাপয়েন্টমেন্টে সহায়তা।", en: "We help with file prep, document review and embassy appointment guidance." },
   faqTitle: { bn: "প্রায়শই জিজ্ঞাসিত প্রশ্ন", en: "Frequently asked questions" },
