@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useLanguage } from "@/lib/i18n";
 import { COUNTRIES, type Country } from "@/data/countries";
 import { CountryCard } from "./CountryCard";
-import { Search, SearchX, X } from "lucide-react";
+import { SearchX, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Filter = "all" | "schengen" | "non" | "popular";
