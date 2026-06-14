@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useLanguage } from "@/lib/i18n";
 import { COUNTRIES, type Country } from "@/data/countries";
 import { CountryCard } from "./CountryCard";
-import { Search, SearchX, X } from "lucide-react";
+import { SearchX, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Filter = "all" | "schengen" | "non" | "popular";
@@ -41,49 +41,35 @@ export function CountryGrid({ query, setQuery, onSelect }: Props) {
   const hasActiveFilter = query.trim().length > 0 || filter !== "all";
 
   return (
-    <section id="countries" className="container py-16 md:py-20">
-      <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <section id="countries" className="container py-8 md:py-12">
+      <div className="mb-4 flex items-end justify-between px-1">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-primary md:text-4xl">{t("countries")}</h2>
-          <p className="mt-2 max-w-xl text-muted-foreground">{t("heroSub")}</p>
-        </div>
-
-        <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-3 shadow-soft md:w-80">
-          <Search className="h-4 w-4 text-muted-foreground" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("searchPlaceholder")}
-            className="w-full bg-transparent py-3 text-sm focus:outline-none"
-          />
-          {query && (
-            <button onClick={() => setQuery("")} className="rounded-full p-1 text-muted-foreground hover:bg-secondary" aria-label={t("clearSearch")}>
-              <X className="h-3.5 w-3.5" />
-            </button>
-          )}
+          <h2 className="text-xl font-bold tracking-tight text-primary md:text-2xl">{t("countries")}</h2>
+          <p className="mt-0.5 text-xs text-muted-foreground md:text-sm">{COUNTRIES.length} destinations</p>
         </div>
       </div>
 
-      <div className="mb-8 -mx-1 flex gap-2 overflow-x-auto px-1 pb-2">
+      {/* Filter pills */}
+      <div className="mb-4 -mx-4 flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {filters.map((f) => (
           <button
             key={f.id}
             onClick={() => setFilter(f.id)}
-            className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition-smooth ${
+            className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition ${
               filter === f.id
-                ? "border-transparent bg-primary text-primary-foreground shadow-soft"
-                : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-primary"
+                ? "bg-[#0D3B66] text-white shadow-soft"
+                : "bg-white text-muted-foreground ring-1 ring-border hover:text-primary"
             }`}
           >{f.label}</button>
         ))}
       </div>
 
       {visible.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center shadow-soft animate-fade-up">
+        <div className="rounded-3xl border border-dashed border-border bg-card p-8 text-center shadow-soft animate-fade-up">
           <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-secondary text-muted-foreground">
             <SearchX className="h-6 w-6" />
           </div>
-          <h3 className="text-xl font-bold text-primary">{t("emptyTitle")}</h3>
+          <h3 className="text-lg font-bold text-primary">{t("emptyTitle")}</h3>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
             {query ? `${t("emptyForQuery")} "${query}".` : t("emptyForFilter")}
           </p>
@@ -103,14 +89,14 @@ export function CountryGrid({ query, setQuery, onSelect }: Props) {
             </div>
           )}
 
-          <div className="mt-8 border-t border-border pt-6">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("recommended")}</p>
+          <div className="mt-6 border-t border-border pt-5">
+            <p className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t("recommended")}</p>
             <div className="flex flex-wrap justify-center gap-2">
               {popularSuggestions.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => { setQuery(""); setFilter("all"); onSelect(c); }}
-                  className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-primary shadow-soft transition-smooth hover:-translate-y-0.5 hover:border-accent hover:shadow-card"
+                  className="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-primary ring-1 ring-border transition hover:-translate-y-0.5 hover:ring-accent"
                 >
                   <span className="text-base">{c.flag}</span> {tx(c.name)}
                 </button>
@@ -119,7 +105,7 @@ export function CountryGrid({ query, setQuery, onSelect }: Props) {
           </div>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((c) => (
             <CountryCard key={c.id} country={c} onSelect={onSelect} />
           ))}

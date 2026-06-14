@@ -3,6 +3,7 @@ import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
 import { Footer } from "@/components/Footer";
 import { CountryDetail } from "@/components/CountryDetail";
+import { BottomNav } from "@/components/BottomNav";
 import { getCountryBySlug } from "@/data/countries";
 
 type Cat = "work" | "visit" | "business" | "trc";
@@ -29,6 +30,7 @@ export default function CountryPage() {
         onCategoryChange={(c) => navigate(`/country/${country.slug}/${c}`, { replace: false })}
       />
       <Footer />
+      <BottomNav />
     </div>
   );
 }

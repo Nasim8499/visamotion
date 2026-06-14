@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, TrendingUp, Clock, Star, ImageOff, RefreshCw } from "lucide-react";
+import { ChevronRight, TrendingUp, Clock, Star, ImageOff, RefreshCw } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import type { Country } from "@/data/countries";
 
@@ -9,7 +9,7 @@ interface CountryCardProps {
 }
 
 export function CountryCard({ country, onSelect }: CountryCardProps) {
-  const { t, tx } = useLanguage();
+  const { t, tx, lang } = useLanguage();
   const [imgError, setImgError] = useState(false);
   const [imgKey, setImgKey] = useState(0);
 
@@ -20,78 +20,68 @@ export function CountryCard({ country, onSelect }: CountryCardProps) {
   };
 
   return (
-    <article
+    <button
       id={`country-${country.slug}`}
-      className="group block overflow-hidden rounded-3xl border border-border bg-card text-left shadow-card transition-smooth hover:-translate-y-1 hover:shadow-lift"
+      onClick={() => onSelect(country)}
+      className="group relative flex w-full items-center gap-3 overflow-hidden rounded-2xl bg-white p-3 text-left shadow-card ring-1 ring-border transition hover:-translate-y-0.5 hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      <button
-        onClick={() => onSelect(country)}
-        className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2"
-      >
-        <div className="relative h-48 overflow-hidden">
-          {imgError ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-card-fallback text-white">
-              <ImageOff className="h-7 w-7 opacity-80" />
-              <p className="text-xs font-medium opacity-90">{t("imageUnavailable")}</p>
-              <button
-                onClick={retry}
-                className="mt-1 inline-flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur transition-smooth hover:bg-white/30"
-              >
-                <RefreshCw className="h-3 w-3" /> {t("retry")}
-              </button>
-            </div>
-          ) : (
-            <img
-              key={imgKey}
-              src={country.image}
-              alt={tx(country.name)}
-              loading="lazy"
-              onError={() => setImgError(true)}
-              className="absolute inset-0 h-full w-full object-cover transition-smooth duration-700 group-hover:scale-110"
-            />
+      {/* Thumbnail */}
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl">
+        {imgError ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-card-fallback text-white">
+            <ImageOff className="h-4 w-4 opacity-80" />
+            <button onClick={retry} className="rounded-full bg-white/20 p-1 text-white" aria-label={t("retry")}>
+              <RefreshCw className="h-2.5 w-2.5" />
+            </button>
+          </div>
+        ) : (
+          <img
+            key={imgKey}
+            src={country.image}
+            alt={tx(country.name)}
+            loading="lazy"
+            onError={() => setImgError(true)}
+            className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110"
+          />
+        )}
+        <div className="absolute inset-x-0 bottom-0 grid place-items-center bg-gradient-to-t from-black/55 to-transparent pb-0.5">
+          <span className="text-base leading-none drop-shadow">{country.flag}</span>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-1.5">
+          <div className={`truncate text-[14.5px] font-bold text-primary ${lang === "bn" ? "font-bn" : ""}`}>
+            {tx(country.name)}
+          </div>
+          {country.popular && (
+            <Star className="h-3 w-3 shrink-0 fill-amber text-amber" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/25 to-transparent" />
-
-          <div className="absolute left-3 top-3 flex gap-2">
-            <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-primary shadow-soft backdrop-blur">
-              {country.schengen ? t("schengen") : t("nonSchengen")}
-            </span>
-            {country.popular && (
-              <span className="flex items-center gap-1 rounded-full bg-amber px-3 py-1 text-xs font-semibold text-white shadow-soft">
-                <Star className="h-3 w-3 fill-current" /> {t("popular")}
-              </span>
-            )}
-          </div>
-
-          <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between text-white">
-            <div>
-              <div className="text-3xl leading-none drop-shadow">{country.flag}</div>
-              <div className="mt-1 text-xl font-bold drop-shadow">{tx(country.name)}</div>
-            </div>
-          </div>
         </div>
-
-        <div className="p-5">
-          <div className="mb-4 grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-secondary/70 p-3">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <TrendingUp className="h-3.5 w-3.5" /> {t("approvalRate")}
-              </div>
-              <div className="mt-1 text-lg font-bold text-emerald">{country.approvalRate}%</div>
-            </div>
-            <div className="rounded-xl bg-secondary/70 p-3">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Clock className="h-3.5 w-3.5" /> {t("processingTime")}
-              </div>
-              <div className="mt-1 text-xs font-semibold text-primary">{tx(country.processing)}</div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between text-sm font-semibold text-accent transition-smooth group-hover:gap-2">
-            {t("viewChecklist")}
-            <ArrowRight className="h-4 w-4 transition-smooth group-hover:translate-x-1" />
-          </div>
+        <div className="mt-0.5 flex items-center gap-1.5">
+          <span className={`rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wider ${
+            country.schengen ? "bg-accent/10 text-accent" : "bg-secondary text-muted-foreground"
+          }`}>
+            {country.schengen ? t("schengen") : t("nonSchengen")}
+          </span>
         </div>
-      </button>
-    </article>
+        <div className="mt-1.5 flex items-center gap-3 text-[10.5px] text-muted-foreground">
+          <span className="inline-flex items-center gap-1">
+            <TrendingUp className="h-3 w-3 text-emerald" />
+            <b className="text-emerald">{country.approvalRate}%</b>
+          </span>
+          <span className="inline-flex items-center gap-1 truncate">
+            <Clock className="h-3 w-3" />
+            <span className={`truncate ${lang === "bn" ? "font-bn" : ""}`}>{tx(country.processing)}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Chevron */}
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-secondary text-muted-foreground transition group-hover:bg-[#0D3B66] group-hover:text-white">
+        <ChevronRight className="h-4 w-4" strokeWidth={2.5} />
+      </div>
+    </button>
   );
 }
