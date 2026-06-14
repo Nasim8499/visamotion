@@ -119,12 +119,125 @@
 }
 .animate-fade-up { animation: fade-up 600ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-/* Print styles */
+/* ============================================================
+   Print / A4 PDF template
+   ============================================================ */
+.pdf-only { display: none; }
+
 @media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm 16mm 12mm;
+  }
+  html, body { background: #fff !important; }
   .no-print { display: none !important; }
-  body { background: white; }
-  .print-container { max-width: 100% !important; padding: 0 !important; }
-  .print-break { page-break-after: always; }
-  .shadow-card, .shadow-lift, .shadow-soft { box-shadow: none !important; }
-  .print-card { border: 1px solid #e5e7eb !important; }
+  .pdf-only { display: block !important; }
+
+  /* Hide app chrome entirely while printing */
+  body.printing > #root > .min-h-screen > header,
+  body.printing > #root > .min-h-screen > section,
+  body.printing > #root > .min-h-screen > div:not(.pdf-only),
+  body.printing > #root > .min-h-screen > footer { display: none !important; }
+  body.printing .pdf-only { display: block !important; }
 }
+
+/* PDF template styles (also used on screen for layout; hidden via .pdf-only) */
+.pdf-page {
+  font-family: 'DM Sans', 'Noto Sans Bengali', sans-serif;
+  color: #0D3B66;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.pdf-bn { font-family: 'Noto Sans Bengali', 'DM Sans', sans-serif; }
+
+.pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 6mm;
+  border-bottom: 2px solid #0F766E;
+  margin-bottom: 6mm;
+}
+.pdf-brand { display: flex; gap: 10px; align-items: center; }
+.pdf-logo {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #0F766E, #14B8A6);
+  color: #fff; font-weight: 800;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 12pt;
+}
+.pdf-brand-name { font-weight: 700; font-size: 13pt; color: #0D3B66; }
+.pdf-brand-sub { font-size: 8pt; color: #64748b; max-width: 280px; }
+.pdf-meta { font-size: 8.5pt; color: #475569; text-align: right; }
+.pdf-meta-row { margin-bottom: 2px; }
+.pdf-meta-row span { color: #94a3b8; }
+
+.pdf-country {
+  display: flex; gap: 14px; align-items: center;
+  margin-bottom: 5mm;
+}
+.pdf-flag { font-size: 30pt; line-height: 1; }
+.pdf-title { font-size: 16pt; font-weight: 700; margin: 0; color: #0D3B66; }
+.pdf-subtitle { font-size: 9pt; color: #475569; margin: 2px 0 0; }
+
+.pdf-progress { margin-bottom: 6mm; }
+.pdf-progress-label { font-size: 9pt; color: #475569; margin-bottom: 3px; }
+.pdf-progress-bar {
+  height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden;
+}
+.pdf-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0F766E, #14B8A6);
+  border-radius: 999px;
+}
+
+.pdf-section { margin-bottom: 6mm; page-break-inside: auto; }
+.pdf-h2 {
+  font-size: 11pt; font-weight: 700;
+  color: #0F766E;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-left: 3px solid #14B8A6;
+  padding-left: 8px;
+  margin: 0 0 4mm;
+}
+
+.pdf-list { list-style: none; padding: 0; margin: 0; }
+.pdf-item {
+  display: flex; gap: 8px; align-items: flex-start;
+  padding: 5px 0;
+  border-bottom: 1px dashed #e2e8f0;
+  page-break-inside: avoid;
+}
+.pdf-item:last-child { border-bottom: none; }
+.pdf-checkbox {
+  flex: 0 0 14px; height: 14px; width: 14px;
+  border: 1.5px solid #0F766E;
+  border-radius: 3px;
+  display: inline-grid; place-items: center;
+  font-size: 10pt; color: #0F766E; font-weight: 800;
+  margin-top: 1px;
+}
+.pdf-item-num { color: #94a3b8; font-weight: 600; min-width: 18px; }
+.pdf-item-text { flex: 1; color: #0f172a; font-size: 10pt; }
+
+.pdf-notes { list-style: none; padding: 0; margin: 0; }
+.pdf-note { font-size: 9.5pt; color: #334155; margin-bottom: 3px; page-break-inside: avoid; }
+
+.pdf-link-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+.pdf-link-table td { padding: 6px 0; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+.pdf-link-table td:first-child { width: 38%; color: #475569; font-weight: 600; }
+.pdf-link-table td:last-child { color: #0F766E; word-break: break-all; }
+
+.pdf-footer {
+  margin-top: 8mm;
+  padding-top: 4mm;
+  border-top: 1px solid #e2e8f0;
+  font-size: 8pt; color: #64748b;
+}
+.pdf-footer p { margin: 0 0 3px; }
+.pdf-copy { color: #94a3b8; }
+
