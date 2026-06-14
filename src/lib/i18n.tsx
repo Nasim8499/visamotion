@@ -99,6 +99,37 @@ const STRINGS = {
   disclaimer: { bn: "ডিসক্লেইমার", en: "Disclaimer" },
   disclaimerText: { bn: "চেকলিস্টের প্রয়োজনীয়তা এম্বাসি, আবেদনকারীর প্রোফাইল, জাতীয়তা ও আপডেটেড অভিবাসন নিয়ম অনুসারে ভিন্ন হতে পারে। জমা দেওয়ার আগে সর্বদা অফিসিয়াল এম্বাসি বা ভিসা অ্যাপ্লিকেশন সেন্টারের সাথে যাচাই করুন।", en: "Checklist requirements may vary depending on the embassy, applicant profile, nationality, and updated immigration rules. Always verify with the official embassy or visa application centre before submission." },
   copyright: { bn: "© 2026 ভিসা মোশন। সর্বস্বত্ব সংরক্ষিত।", en: "© 2026 Visa Motion. All rights reserved." },
+
+  // Empty / errors
+  emptyTitle: { bn: "কোনো দেশ পাওয়া যায়নি", en: "No matching countries" },
+  emptyForQuery: { bn: "এই অনুসন্ধানের জন্য কোনো ফলাফল নেই —", en: "No results found for" },
+  emptyForFilter: { bn: "এই ফিল্টারের জন্য কোনো দেশ নেই।", en: "No countries match this filter." },
+  clearSearch: { bn: "অনুসন্ধান মুছুন", en: "Clear search" },
+  clearFilter: { bn: "ফিল্টার রিসেট", en: "Reset filter" },
+  recommended: { bn: "জনপ্রিয় দেশগুলো দেখুন", en: "Try a popular destination" },
+  imageUnavailable: { bn: "ছবি লোড করা যায়নি", en: "Image couldn't load" },
+  retry: { bn: "আবার চেষ্টা করুন", en: "Retry" },
+
+  // Edit links modal
+  editLinks: { bn: "লিংক এডিট করুন", en: "Edit Links" },
+  editLinksDesc: { bn: "এই দেশের অফিসিয়াল ভিসা ও অ্যাপয়েন্টমেন্ট লিংক যোগ বা আপডেট করুন। স্থানীয়ভাবে সংরক্ষিত হবে।", en: "Add or update the official visa and appointment links for this country. Saved locally on this device." },
+  linksLocalNote: { bn: "এই পরিবর্তনসমূহ শুধু আপনার ডিভাইসে সংরক্ষিত হবে।", en: "Your changes are stored only on this device." },
+  missingLinkTitle: { bn: "কিছু লিংক পাওয়া যায়নি", en: "Some links are missing" },
+  missingLinkDesc: { bn: "এই দেশের অফিসিয়াল ভিসা বা অ্যাপয়েন্টমেন্ট লিংক যোগ করুন।", en: "Add the official visa or appointment link for this country." },
+  addNow: { bn: "এখন যোগ করুন", en: "Add now" },
+  customLink: { bn: "কাস্টম", en: "Custom" },
+  notProvided: { bn: "প্রদান করা হয়নি", en: "Not provided" },
+  invalidUrl: { bn: "অবৈধ URL", en: "Invalid URL" },
+  linksSaved: { bn: "লিংক সংরক্ষিত হয়েছে", en: "Links saved" },
+  linksReset: { bn: "ডিফল্টে রিসেট করা হয়েছে", en: "Reset to defaults" },
+  save: { bn: "সংরক্ষণ", en: "Save" },
+  cancel: { bn: "বাতিল", en: "Cancel" },
+  reset: { bn: "রিসেট", en: "Reset" },
+
+  // PDF / Print
+  printDate: { bn: "প্রিন্টের তারিখ", en: "Generated" },
+  language: { bn: "ভাষা", en: "Language" },
+  checklistHeader: { bn: "ডকুমেন্ট চেকলিস্ট", en: "Document Checklist" },
 } as const;
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
