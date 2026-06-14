@@ -11,7 +11,7 @@ export function Footer() {
           <div className="md:col-span-1">
             <div className="mb-4 flex items-center gap-2">
               <div className="grid h-9 w-9 place-items-center rounded-xl bg-teal-gradient">
-                <Plane className="h-4.5 w-4.5 text-white" strokeWidth={2.5} />
+                <Plane className="h-[1.125rem] w-[1.125rem] text-white" strokeWidth={2.5} />
               </div>
               <span className="text-lg font-bold">Visa Motion</span>
             </div>

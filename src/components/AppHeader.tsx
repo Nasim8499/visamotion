@@ -14,7 +14,7 @@ export function AppHeader({ onHome }: AppHeaderProps) {
       <div className="container flex h-16 items-center justify-between">
         <button onClick={onHome} className="flex items-center gap-2 transition-smooth hover:opacity-80">
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-teal-gradient shadow-soft">
-            <Plane className="h-4.5 w-4.5 text-white" strokeWidth={2.5} />
+            <Plane className="h-[1.125rem] w-[1.125rem] text-white" strokeWidth={2.5} />
           </div>
           <span className="text-lg font-bold tracking-tight text-primary">Visa Motion</span>
         </button>

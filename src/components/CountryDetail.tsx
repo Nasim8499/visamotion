@@ -232,7 +232,7 @@ function InfoCard({ icon: Icon, title, tone, children }: { icon: any; title: str
     <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
       <div className="mb-3 flex items-center gap-3">
         <div className={`grid h-9 w-9 place-items-center rounded-xl ${toneClass}`}>
-          <Icon className="h-4.5 w-4.5" />
+          <Icon className="h-[1.125rem] w-[1.125rem]" />
         </div>
         <h4 className="text-base font-bold text-primary">{title}</h4>
       </div>

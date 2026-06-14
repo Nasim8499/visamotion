@@ -29,7 +29,7 @@ export function ProcessingTimeline() {
           {steps.map((s, i) => (
             <div key={i} className="relative flex items-start gap-4 md:flex-col md:items-center md:text-center">
               <div className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal-gradient text-white shadow-soft">
-                <s.icon className="h-4.5 w-4.5" />
+                <s.icon className="h-[1.125rem] w-[1.125rem]" />
               </div>
               <div>
                 <div className="text-sm font-semibold text-primary">{s.t}</div>

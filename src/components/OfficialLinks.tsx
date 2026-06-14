@@ -30,7 +30,7 @@ export function OfficialLinks({ country }: { country: Country }) {
             >
               <div className="flex items-center gap-3">
                 <div className={`grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br ${it.color} text-white shadow-soft`}>
-                  <it.icon className="h-4.5 w-4.5" />
+                  <it.icon className="h-[1.125rem] w-[1.125rem]" />
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-primary">{it.label}</div>
