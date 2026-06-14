@@ -153,7 +153,24 @@ const STRINGS = {
   faq4Q: { bn: "কনসালটেশন ফি কত?", en: "How much is a consultation?" },
   faq4A: { bn: "প্রথম পরিচিতি সেশন বিনামূল্যে। ফাইল রিভিউয়ের জন্য কাস্টম কোট দেওয়া হয়।", en: "First intro session is free. Custom quote for full file review." },
   backHome: { bn: "হোমে ফিরে যান", en: "Back to home" },
+
+  // Onboarding
+  skip: { bn: "এড়িয়ে যান", en: "Skip" },
+  next: { bn: "পরবর্তী", en: "Next" },
+  getStartedOnb: { bn: "শুরু করুন", en: "Get Started" },
+  onb1Title: { bn: "প্রতিটি দেশের পরিষ্কার ভিসা গাইড", en: "Clear visa guides for every country" },
+  onb1Sub: { bn: "ওয়ার্ক, ভিজিট, বিজনেস ও TRC — সবকিছু এক জায়গায়, দুই ভাষায়।", en: "Work, Visit, Business and TRC — everything in one place, in two languages." },
+  onb2Title: { bn: "ডকুমেন্ট চেকলিস্ট ও অগ্রগতি ট্র্যাক করুন", en: "Track documents with smart checklists" },
+  onb2Sub: { bn: "প্রতিটি ডকুমেন্ট চেক করুন, অগ্রগতি সংরক্ষিত থাকবে — যেকোনো সময় ফিরে আসুন।", en: "Tick each requirement; progress saves automatically — resume anytime." },
+  onb3Title: { bn: "অফিসিয়াল লিংক ও বিশেষজ্ঞ সহায়তা", en: "Official links & expert guidance" },
+  onb3Sub: { bn: "এম্বাসি, VFS অ্যাপয়েন্টমেন্ট এবং পরামর্শক সেবা — এক ক্লিকে।", en: "Embassy, VFS appointments and consultancy support — one tap away." },
+
+  // Infographics
+  approvalRing: { bn: "অনুমোদন রেট", en: "Approval rate" },
+  lastYear: { bn: "গত বছর", en: "Last year" },
+  exploreCountries: { bn: "সকল দেশ ঘুরে দেখুন", en: "Explore all destinations" },
 } as const;
+
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {

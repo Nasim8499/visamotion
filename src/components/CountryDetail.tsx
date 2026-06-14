@@ -9,7 +9,10 @@ import { OfficialLinks } from "./OfficialLinks";
 import { ProcessingTimeline } from "./ProcessingTimeline";
 import { ConsultationCTA } from "./ConsultationCTA";
 import { PrintableChecklist } from "./PrintableChecklist";
+import { ApprovalRing } from "./ApprovalRing";
+import { AnimatedTimeline } from "./AnimatedTimeline";
 import { toast } from "sonner";
+
 
 type Category = "work" | "visit" | "business" | "trc";
 
@@ -120,7 +123,20 @@ export function CountryDetail({ country, category, onBack, onCategoryChange }: P
 
       <div className="container -mt-8 grid gap-8 pb-16 lg:grid-cols-3 no-print">
         <div className="space-y-8 lg:col-span-2">
-          {/* Tabs + checklist */}
+          {/* Infographic strip */}
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-3xl border border-border bg-card p-5 shadow-card flex items-center gap-4 transition hover:-translate-y-0.5 hover:shadow-lift">
+              <ApprovalRing value={country.approvalRate} label={t("approvalRing")} sublabel={t("lastYear")} />
+              <div className="min-w-0">
+                <div className="text-[10.5px] font-bold uppercase tracking-wider text-teal">{t("approvalRate")}</div>
+                <div className={`mt-1 text-sm font-semibold text-primary ${lang === "bn" ? "font-bn" : ""}`}>{tx(country.name)}</div>
+                <div className="mt-2 text-[11px] text-muted-foreground">{tx(country.regionType)}</div>
+              </div>
+            </div>
+            <div className="md:col-span-2"><AnimatedTimeline /></div>
+          </div>
+
+
           <div className="rounded-3xl border border-border bg-card shadow-card">
             <div className="flex flex-wrap gap-1 border-b border-border p-2" role="tablist">
               {tabs.map((tab) => (
