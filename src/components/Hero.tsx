@@ -220,16 +220,21 @@ export function Hero({ query, setQuery, onCta }: HeroProps) {
               <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition group-hover:scale-150" />
               <div className="pointer-events-none absolute -bottom-10 -left-8 h-24 w-24 rounded-full bg-black/10 blur-2xl" />
 
-              <div className="relative flex h-full flex-col justify-between">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
-                  <s.icon className="h-5 w-5" strokeWidth={2.4} />
-                </div>
-                <div>
-                  <div className={`text-[14px] font-bold leading-tight drop-shadow ${lang === "bn" ? "font-bn" : ""}`}>
-                    {t(s.key as any)}
+              {/* Animated graphic */}
+              <s.art className="pointer-events-none absolute inset-x-0 top-3 mx-auto h-[58%] w-[88%] opacity-95 drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)] transition-transform duration-500 group-hover:scale-105" />
+
+              <div className="relative flex h-full flex-col justify-end">
+                <div className="flex items-center gap-2">
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-white/20 backdrop-blur-md ring-1 ring-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+                    <s.icon className="h-4 w-4" strokeWidth={2.4} />
                   </div>
-                  <div className="mt-0.5 text-[10.5px] font-semibold uppercase tracking-wider text-white/80">
-                    {COUNTRIES.length} {lang === "bn" ? "দেশ" : "countries"}
+                  <div className="min-w-0">
+                    <div className={`text-[13.5px] font-bold leading-tight drop-shadow ${lang === "bn" ? "font-bn" : ""}`}>
+                      {t(s.key as any)}
+                    </div>
+                    <div className="text-[10px] font-semibold uppercase tracking-wider text-white/85">
+                      {COUNTRIES.length} {lang === "bn" ? "দেশ" : "countries"}
+                    </div>
                   </div>
                 </div>
               </div>
