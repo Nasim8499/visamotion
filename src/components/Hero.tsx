@@ -101,15 +101,91 @@ function TrcArt(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+type Stage = { bn: string; en: string };
 const services: Array<{
   id: string; icon: ComponentType<SVGProps<SVGSVGElement>>; art: ComponentType<SVGProps<SVGSVGElement>>;
-  key: string; tone: string; shadow: string;
+  key: string; tone: string; shadow: string; eta: { bn: string; en: string }; stages: Stage[];
 }> = [
-  { id: "work", icon: Briefcase, art: WorkArt, key: "workVisa", tone: "from-[#0F766E] via-[#14B8A6] to-[#5cbdb9]", shadow: "shadow-[0_18px_40px_-18px_rgba(15,118,110,0.65)]" },
-  { id: "visit", icon: MapPin, art: VisitArt, key: "visitVisa", tone: "from-[#0D3B66] via-[#1e5a8a] to-[#3b6fa0]", shadow: "shadow-[0_18px_40px_-18px_rgba(13,59,102,0.7)]" },
-  { id: "business", icon: Building2, art: BusinessArt, key: "businessVisa", tone: "from-[#9b4423] via-[#d4842a] to-[#e8b84a]", shadow: "shadow-[0_18px_40px_-18px_rgba(212,132,42,0.6)]" },
-  { id: "trc", icon: IdCard, art: TrcArt, key: "trcCard", tone: "from-[#4f46e5] via-[#6366f1] to-[#a78bfa]", shadow: "shadow-[0_18px_40px_-18px_rgba(79,70,229,0.6)]" },
+  {
+    id: "work", icon: Briefcase, art: WorkArt, key: "workVisa",
+    tone: "from-[#0F766E] via-[#14B8A6] to-[#5cbdb9]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(15,118,110,0.65)]",
+    eta: { bn: "৪–৮ সপ্তাহ", en: "4–8 weeks" },
+    stages: [
+      { bn: "ডকুমেন্ট", en: "Documents" },
+      { bn: "এমপ্লয়ার", en: "Employer" },
+      { bn: "ইন্টারভিউ", en: "Interview" },
+      { bn: "অনুমোদন", en: "Approval" },
+    ],
+  },
+  {
+    id: "visit", icon: MapPin, art: VisitArt, key: "visitVisa",
+    tone: "from-[#0D3B66] via-[#1e5a8a] to-[#3b6fa0]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(13,59,102,0.7)]",
+    eta: { bn: "২–৪ সপ্তাহ", en: "2–4 weeks" },
+    stages: [
+      { bn: "আবেদন", en: "Apply" },
+      { bn: "বায়োমেট্রিক", en: "Biometric" },
+      { bn: "যাচাই", en: "Review" },
+      { bn: "স্ট্যাম্প", en: "Stamp" },
+    ],
+  },
+  {
+    id: "business", icon: Building2, art: BusinessArt, key: "businessVisa",
+    tone: "from-[#9b4423] via-[#d4842a] to-[#e8b84a]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(212,132,42,0.6)]",
+    eta: { bn: "৩–৬ সপ্তাহ", en: "3–6 weeks" },
+    stages: [
+      { bn: "ইনভাইট", en: "Invite" },
+      { bn: "ডকুমেন্ট", en: "Docs" },
+      { bn: "ইন্টারভিউ", en: "Interview" },
+      { bn: "ইস্যু", en: "Issued" },
+    ],
+  },
+  {
+    id: "trc", icon: IdCard, art: TrcArt, key: "trcCard",
+    tone: "from-[#4f46e5] via-[#6366f1] to-[#a78bfa]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(79,70,229,0.6)]",
+    eta: { bn: "৬–১২ সপ্তাহ", en: "6–12 weeks" },
+    stages: [
+      { bn: "আবেদন", en: "Apply" },
+      { bn: "বায়োমেট্রিক", en: "Biometric" },
+      { bn: "যাচাই", en: "Vetting" },
+      { bn: "TRC কার্ড", en: "TRC Card" },
+    ],
+  },
 ];
+
+function CardTimeline({ stages, lang }: { stages: Stage[]; lang: "bn" | "en" }) {
+  return (
+    <div className="relative">
+      {/* track */}
+      <div className="relative mx-1 h-[3px] rounded-full bg-white/25">
+        <div
+          className="absolute inset-y-0 left-0 rounded-full bg-white/90 shadow-[0_0_8px_rgba(255,255,255,0.7)]"
+          style={{ animation: "timelineFill 3.6s cubic-bezier(0.22,1,0.36,1) infinite" }}
+        />
+      </div>
+      {/* nodes */}
+      <div className="mt-1.5 flex justify-between">
+        {stages.map((s, i) => (
+          <div key={i} className="flex w-1/4 flex-col items-center gap-1">
+            <span
+              className="block h-2 w-2 rounded-full bg-white ring-2 ring-white/40"
+              style={{ animation: `timelinePulse 3.6s ${i * 0.9}s ease-out infinite` }}
+            />
+            <span
+              className={`text-[8.5px] font-semibold leading-none text-white/90 ${lang === "bn" ? "font-bn" : ""}`}
+              style={{ maxWidth: 56 }}
+            >
+              {lang === "bn" ? s.bn : s.en}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 
 export function Hero({ query, setQuery, onCta }: HeroProps) {
