@@ -101,15 +101,91 @@ function TrcArt(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+type Stage = { bn: string; en: string };
 const services: Array<{
   id: string; icon: ComponentType<SVGProps<SVGSVGElement>>; art: ComponentType<SVGProps<SVGSVGElement>>;
-  key: string; tone: string; shadow: string;
+  key: string; tone: string; shadow: string; eta: { bn: string; en: string }; stages: Stage[];
 }> = [
-  { id: "work", icon: Briefcase, art: WorkArt, key: "workVisa", tone: "from-[#0F766E] via-[#14B8A6] to-[#5cbdb9]", shadow: "shadow-[0_18px_40px_-18px_rgba(15,118,110,0.65)]" },
-  { id: "visit", icon: MapPin, art: VisitArt, key: "visitVisa", tone: "from-[#0D3B66] via-[#1e5a8a] to-[#3b6fa0]", shadow: "shadow-[0_18px_40px_-18px_rgba(13,59,102,0.7)]" },
-  { id: "business", icon: Building2, art: BusinessArt, key: "businessVisa", tone: "from-[#9b4423] via-[#d4842a] to-[#e8b84a]", shadow: "shadow-[0_18px_40px_-18px_rgba(212,132,42,0.6)]" },
-  { id: "trc", icon: IdCard, art: TrcArt, key: "trcCard", tone: "from-[#4f46e5] via-[#6366f1] to-[#a78bfa]", shadow: "shadow-[0_18px_40px_-18px_rgba(79,70,229,0.6)]" },
+  {
+    id: "work", icon: Briefcase, art: WorkArt, key: "workVisa",
+    tone: "from-[#0F766E] via-[#14B8A6] to-[#5cbdb9]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(15,118,110,0.65)]",
+    eta: { bn: "৪–৮ সপ্তাহ", en: "4–8 weeks" },
+    stages: [
+      { bn: "ডকুমেন্ট", en: "Documents" },
+      { bn: "এমপ্লয়ার", en: "Employer" },
+      { bn: "ইন্টারভিউ", en: "Interview" },
+      { bn: "অনুমোদন", en: "Approval" },
+    ],
+  },
+  {
+    id: "visit", icon: MapPin, art: VisitArt, key: "visitVisa",
+    tone: "from-[#0D3B66] via-[#1e5a8a] to-[#3b6fa0]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(13,59,102,0.7)]",
+    eta: { bn: "২–৪ সপ্তাহ", en: "2–4 weeks" },
+    stages: [
+      { bn: "আবেদন", en: "Apply" },
+      { bn: "বায়োমেট্রিক", en: "Biometric" },
+      { bn: "যাচাই", en: "Review" },
+      { bn: "স্ট্যাম্প", en: "Stamp" },
+    ],
+  },
+  {
+    id: "business", icon: Building2, art: BusinessArt, key: "businessVisa",
+    tone: "from-[#9b4423] via-[#d4842a] to-[#e8b84a]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(212,132,42,0.6)]",
+    eta: { bn: "৩–৬ সপ্তাহ", en: "3–6 weeks" },
+    stages: [
+      { bn: "ইনভাইট", en: "Invite" },
+      { bn: "ডকুমেন্ট", en: "Docs" },
+      { bn: "ইন্টারভিউ", en: "Interview" },
+      { bn: "ইস্যু", en: "Issued" },
+    ],
+  },
+  {
+    id: "trc", icon: IdCard, art: TrcArt, key: "trcCard",
+    tone: "from-[#4f46e5] via-[#6366f1] to-[#a78bfa]",
+    shadow: "shadow-[0_18px_40px_-18px_rgba(79,70,229,0.6)]",
+    eta: { bn: "৬–১২ সপ্তাহ", en: "6–12 weeks" },
+    stages: [
+      { bn: "আবেদন", en: "Apply" },
+      { bn: "বায়োমেট্রিক", en: "Biometric" },
+      { bn: "যাচাই", en: "Vetting" },
+      { bn: "TRC কার্ড", en: "TRC Card" },
+    ],
+  },
 ];
+
+function CardTimeline({ stages, lang }: { stages: Stage[]; lang: "bn" | "en" }) {
+  return (
+    <div className="relative">
+      {/* track */}
+      <div className="relative mx-1 h-[3px] rounded-full bg-white/25">
+        <div
+          className="absolute inset-y-0 left-0 rounded-full bg-white/90 shadow-[0_0_8px_rgba(255,255,255,0.7)]"
+          style={{ animation: "timelineFill 3.6s cubic-bezier(0.22,1,0.36,1) infinite" }}
+        />
+      </div>
+      {/* nodes */}
+      <div className="mt-1.5 flex justify-between">
+        {stages.map((s, i) => (
+          <div key={i} className="flex w-1/4 flex-col items-center gap-1">
+            <span
+              className="block h-2 w-2 rounded-full bg-white ring-2 ring-white/40"
+              style={{ animation: `timelinePulse 3.6s ${i * 0.9}s ease-out infinite` }}
+            />
+            <span
+              className={`text-[8.5px] font-semibold leading-none text-white/90 ${lang === "bn" ? "font-bn" : ""}`}
+              style={{ maxWidth: 56 }}
+            >
+              {lang === "bn" ? s.bn : s.en}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 
 export function Hero({ query, setQuery, onCta }: HeroProps) {
@@ -213,30 +289,49 @@ export function Hero({ query, setQuery, onCta }: HeroProps) {
               key={s.id}
               onClick={onCta}
               style={{ animation: `fade-up 500ms ${i * 80}ms cubic-bezier(0.22,1,0.36,1) both` }}
-              className={`group relative aspect-square overflow-hidden rounded-3xl bg-gradient-to-br ${s.tone} p-4 text-left text-white ring-1 ring-white/20 ${s.shadow} transition-all duration-300 hover:-translate-y-1 hover:shadow-lift`}
+              className={`group relative flex h-[230px] flex-col overflow-hidden rounded-3xl bg-gradient-to-br ${s.tone} p-3.5 text-left text-white ring-1 ring-white/20 ${s.shadow} transition-all duration-300 hover:-translate-y-1 hover:shadow-lift`}
             >
               {/* Highlight + ambient */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/10" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/20" />
               <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition group-hover:scale-150" />
-              <div className="pointer-events-none absolute -bottom-10 -left-8 h-24 w-24 rounded-full bg-black/10 blur-2xl" />
+              <div className="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-black/15 blur-2xl" />
 
-              {/* Animated graphic */}
-              <s.art className="pointer-events-none absolute inset-x-0 top-3 mx-auto h-[58%] w-[88%] opacity-95 drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)] transition-transform duration-500 group-hover:scale-105" />
-
-              <div className="relative flex h-full flex-col justify-end">
-                <div className="flex items-center gap-2">
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-white/20 backdrop-blur-md ring-1 ring-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+              {/* Header: icon + title + ETA chip */}
+              <div className="relative flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/20 backdrop-blur-md ring-1 ring-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
                     <s.icon className="h-4 w-4" strokeWidth={2.4} />
                   </div>
                   <div className="min-w-0">
-                    <div className={`text-[13.5px] font-bold leading-tight drop-shadow ${lang === "bn" ? "font-bn" : ""}`}>
+                    <div className={`truncate text-[12.5px] font-bold leading-tight drop-shadow ${lang === "bn" ? "font-bn" : ""}`}>
                       {t(s.key as any)}
                     </div>
-                    <div className="text-[10px] font-semibold uppercase tracking-wider text-white/85">
+                    <div className="text-[9px] font-semibold uppercase tracking-wider text-white/85">
                       {COUNTRIES.length} {lang === "bn" ? "দেশ" : "countries"}
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Animated graphic */}
+              <div className="relative mt-2 flex-1">
+                <s.art className="pointer-events-none absolute inset-0 mx-auto h-full w-[92%] opacity-95 drop-shadow-[0_6px_14px_rgba(0,0,0,0.28)] transition-transform duration-500 group-hover:scale-105" />
+              </div>
+
+              {/* ETA chip */}
+              <div className="relative mt-1 flex items-center justify-between">
+                <span className={`inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[9.5px] font-semibold text-white backdrop-blur-md ring-1 ring-white/30 ${lang === "bn" ? "font-bn" : ""}`}>
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#FBBF24] shadow-[0_0_6px_#FBBF24] animate-pulse" />
+                  {lang === "bn" ? s.eta.bn : s.eta.en}
+                </span>
+                <span className="text-[9px] font-semibold text-white/80">
+                  {lang === "bn" ? "ধাপসমূহ" : "Stages"}
+                </span>
+              </div>
+
+              {/* Animated processing timeline */}
+              <div className="relative mt-2">
+                <CardTimeline stages={s.stages} lang={lang as "bn" | "en"} />
               </div>
             </button>
           ))}
