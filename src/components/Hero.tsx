@@ -1,6 +1,7 @@
 import { Search, Bell, Menu, Shield, Plane, Briefcase, MapPin, Building2, IdCard, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { COUNTRIES } from "@/data/countries";
+import type { ComponentType, SVGProps } from "react";
 
 interface HeroProps {
   query: string;
@@ -8,12 +9,107 @@ interface HeroProps {
   onCta: () => void;
 }
 
-const services = [
-  { id: "work", icon: Briefcase, key: "workVisa", tone: "from-[#0F766E] via-[#14B8A6] to-[#5cbdb9]", shadow: "shadow-[0_18px_40px_-18px_rgba(15,118,110,0.65)]" },
-  { id: "visit", icon: MapPin, key: "visitVisa", tone: "from-[#0D3B66] via-[#1e5a8a] to-[#3b6fa0]", shadow: "shadow-[0_18px_40px_-18px_rgba(13,59,102,0.7)]" },
-  { id: "business", icon: Building2, key: "businessVisa", tone: "from-[#9b4423] via-[#d4842a] to-[#e8b84a]", shadow: "shadow-[0_18px_40px_-18px_rgba(212,132,42,0.6)]" },
-  { id: "trc", icon: IdCard, key: "trcCard", tone: "from-[#4f46e5] via-[#6366f1] to-[#a78bfa]", shadow: "shadow-[0_18px_40px_-18px_rgba(79,70,229,0.6)]" },
-] as const;
+/* ---------- Animated SVG graphics for each visa category ---------- */
+function WorkArt(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 120 80" fill="none" {...props}>
+      <defs>
+        <linearGradient id="wA" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stopColor="#fff" stopOpacity=".95" />
+          <stop offset="1" stopColor="#fff" stopOpacity=".55" />
+        </linearGradient>
+      </defs>
+      {/* briefcase */}
+      <rect x="22" y="30" width="76" height="40" rx="6" fill="url(#wA)" />
+      <rect x="48" y="22" width="24" height="10" rx="3" fill="#fff" opacity=".9" />
+      <rect x="22" y="44" width="76" height="4" fill="#0D3B66" opacity=".25" />
+      {/* floating coins */}
+      <circle cx="30" cy="18" r="4" fill="#FBBF24" opacity=".9">
+        <animate attributeName="cy" values="18;14;18" dur="2.4s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="92" cy="14" r="3" fill="#FBBF24" opacity=".85">
+        <animate attributeName="cy" values="14;10;14" dur="2.8s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="105" cy="26" r="2.5" fill="#fff" opacity=".7">
+        <animate attributeName="cy" values="26;22;26" dur="2.2s" repeatCount="indefinite" />
+      </circle>
+    </svg>
+  );
+}
+function VisitArt(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 120 80" fill="none" {...props}>
+      {/* globe */}
+      <circle cx="60" cy="44" r="26" fill="#fff" opacity=".9" />
+      <ellipse cx="60" cy="44" rx="26" ry="10" fill="none" stroke="#0D3B66" strokeOpacity=".35" strokeWidth="1.4" />
+      <path d="M34 44h52M60 18v52" stroke="#0D3B66" strokeOpacity=".35" strokeWidth="1.4" />
+      <path d="M48 22c-6 12-6 32 0 44M72 22c6 12 6 32 0 44" stroke="#0D3B66" strokeOpacity=".35" strokeWidth="1.4" fill="none" />
+      {/* plane orbit */}
+      <g style={{ transformOrigin: "60px 44px", animation: "spin 9s linear infinite" }}>
+        <path d="M60 12l4 6-4 2-4-2z" fill="#FBBF24" />
+      </g>
+      {/* pin */}
+      <circle cx="78" cy="32" r="3" fill="#e85d3a">
+        <animate attributeName="r" values="3;4;3" dur="1.6s" repeatCount="indefinite" />
+      </circle>
+    </svg>
+  );
+}
+function BusinessArt(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 120 80" fill="none" {...props}>
+      {/* skyline */}
+      <rect x="20" y="36" width="14" height="34" rx="2" fill="#fff" opacity=".9" />
+      <rect x="38" y="24" width="16" height="46" rx="2" fill="#fff" opacity=".95" />
+      <rect x="58" y="32" width="18" height="38" rx="2" fill="#fff" opacity=".88" />
+      <rect x="80" y="20" width="14" height="50" rx="2" fill="#fff" opacity=".95" />
+      {[40, 44, 48, 52, 56, 60].map((y, i) => (
+        <rect key={i} x="41" y={y} width="3" height="3" fill="#0D3B66" opacity=".5" />
+      ))}
+      {/* chart arrow */}
+      <path d="M22 18 L46 30 L70 22 L98 10" stroke="#FBBF24" strokeWidth="2.5" fill="none" strokeLinecap="round">
+        <animate attributeName="stroke-dasharray" values="0 200;200 0" dur="3s" repeatCount="indefinite" />
+      </path>
+      <circle cx="98" cy="10" r="3" fill="#FBBF24" />
+    </svg>
+  );
+}
+function TrcArt(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 120 80" fill="none" {...props}>
+      {/* card */}
+      <rect x="18" y="20" width="84" height="48" rx="6" fill="#fff" opacity=".95" />
+      <circle cx="34" cy="40" r="8" fill="#a78bfa" opacity=".8" />
+      <rect x="48" y="34" width="40" height="4" rx="2" fill="#0D3B66" opacity=".5" />
+      <rect x="48" y="42" width="28" height="3" rx="1.5" fill="#0D3B66" opacity=".35" />
+      <rect x="26" y="56" width="68" height="3" rx="1.5" fill="#0D3B66" opacity=".3" />
+      {/* sheen */}
+      <rect x="18" y="20" width="84" height="48" rx="6" fill="url(#sheenT)" opacity=".5" />
+      <defs>
+        <linearGradient id="sheenT" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stopColor="#fff" stopOpacity="0" />
+          <stop offset=".5" stopColor="#fff" stopOpacity=".7" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0" />
+          <animate attributeName="x1" values="-1;1" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="x2" values="0;2" dur="3s" repeatCount="indefinite" />
+        </linearGradient>
+      </defs>
+      {/* check */}
+      <circle cx="96" cy="24" r="8" fill="#10B981" />
+      <path d="M92 24l3 3 5-6" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+const services: Array<{
+  id: string; icon: ComponentType<SVGProps<SVGSVGElement>>; art: ComponentType<SVGProps<SVGSVGElement>>;
+  key: string; tone: string; shadow: string;
+}> = [
+  { id: "work", icon: Briefcase, art: WorkArt, key: "workVisa", tone: "from-[#0F766E] via-[#14B8A6] to-[#5cbdb9]", shadow: "shadow-[0_18px_40px_-18px_rgba(15,118,110,0.65)]" },
+  { id: "visit", icon: MapPin, art: VisitArt, key: "visitVisa", tone: "from-[#0D3B66] via-[#1e5a8a] to-[#3b6fa0]", shadow: "shadow-[0_18px_40px_-18px_rgba(13,59,102,0.7)]" },
+  { id: "business", icon: Building2, art: BusinessArt, key: "businessVisa", tone: "from-[#9b4423] via-[#d4842a] to-[#e8b84a]", shadow: "shadow-[0_18px_40px_-18px_rgba(212,132,42,0.6)]" },
+  { id: "trc", icon: IdCard, art: TrcArt, key: "trcCard", tone: "from-[#4f46e5] via-[#6366f1] to-[#a78bfa]", shadow: "shadow-[0_18px_40px_-18px_rgba(79,70,229,0.6)]" },
+];
 
 
 export function Hero({ query, setQuery, onCta }: HeroProps) {
@@ -124,16 +220,21 @@ export function Hero({ query, setQuery, onCta }: HeroProps) {
               <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition group-hover:scale-150" />
               <div className="pointer-events-none absolute -bottom-10 -left-8 h-24 w-24 rounded-full bg-black/10 blur-2xl" />
 
-              <div className="relative flex h-full flex-col justify-between">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
-                  <s.icon className="h-5 w-5" strokeWidth={2.4} />
-                </div>
-                <div>
-                  <div className={`text-[14px] font-bold leading-tight drop-shadow ${lang === "bn" ? "font-bn" : ""}`}>
-                    {t(s.key as any)}
+              {/* Animated graphic */}
+              <s.art className="pointer-events-none absolute inset-x-0 top-3 mx-auto h-[58%] w-[88%] opacity-95 drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)] transition-transform duration-500 group-hover:scale-105" />
+
+              <div className="relative flex h-full flex-col justify-end">
+                <div className="flex items-center gap-2">
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-white/20 backdrop-blur-md ring-1 ring-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+                    <s.icon className="h-4 w-4" strokeWidth={2.4} />
                   </div>
-                  <div className="mt-0.5 text-[10.5px] font-semibold uppercase tracking-wider text-white/80">
-                    {COUNTRIES.length} {lang === "bn" ? "দেশ" : "countries"}
+                  <div className="min-w-0">
+                    <div className={`text-[13.5px] font-bold leading-tight drop-shadow ${lang === "bn" ? "font-bn" : ""}`}>
+                      {t(s.key as any)}
+                    </div>
+                    <div className="text-[10px] font-semibold uppercase tracking-wider text-white/85">
+                      {COUNTRIES.length} {lang === "bn" ? "দেশ" : "countries"}
+                    </div>
                   </div>
                 </div>
               </div>
