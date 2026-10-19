@@ -1,0 +1,89 @@
+[
+  {
+    "name": "Admin dashboard routes to full-page AI Agent",
+    "sanity": true,
+    "viewport": "mobile",
+    "covers": [
+      "admin workspace navigation",
+      "full-page AI agent",
+      "mobile responsive layout"
+    ],
+    "description": "Verifies the dashboard opens the dedicated agent workspace and retains the glass mobile layout.",
+    "steps": [
+      "Open Dashboard",
+      "Tap Open AI Agent",
+      "Check country, purpose and applicant context controls"
+    ],
+    "expected": "A full-page chat workspace opens with selectable country and purpose."
+  },
+  {
+    "name": "Upload and preview a PDF file",
+    "viewport": "mobile",
+    "covers": [
+      "file upload",
+      "PDF preview",
+      "zoom controls",
+      "file removal"
+    ],
+    "description": "Verifies file selection creates a browser-session entry that can be previewed.",
+    "steps": [
+      "Open Files & ZIP",
+      "Upload a small PDF",
+      "Open the file preview",
+      "Use zoom controls"
+    ],
+    "expected": "The PDF preview modal shows the file and zoom controls."
+  },
+  {
+    "name": "Create country-specific applicant profile",
+    "viewport": "desktop",
+    "covers": [
+      "country selection",
+      "visa purpose selection",
+      "applicant profile draft",
+      "checklist"
+    ],
+    "description": "Verifies country and visa purpose selections appear in the generated draft profile.",
+    "steps": [
+      "Open Applications",
+      "Choose Malaysia and Work Visa",
+      "Enter applicant reference",
+      "Generate applicant profile"
+    ],
+    "expected": "A draft profile shows the selected destination, purpose and checklist."
+  },
+  {
+    "name": "Generate printable A4 visa dossier",
+    "viewport": "desktop",
+    "covers": [
+      "PDF Studio",
+      "A4 preview",
+      "zoom controls",
+      "print to PDF"
+    ],
+    "description": "Verifies the checklist preview reflects form inputs and the print/save action is available.",
+    "steps": [
+      "Open PDF Studio",
+      "Edit the title and checklist",
+      "Adjust preview zoom",
+      "Choose Print / Save as PDF"
+    ],
+    "expected": "The preview updates from the form and the browser print dialog is requested."
+  },
+  {
+    "name": "Deployment scan validates repository input",
+    "viewport": "desktop",
+    "covers": [
+      "deployment scan endpoint",
+      "GitHub repository format validation",
+      "server-side secret status"
+    ],
+    "description": "Verifies repository input validation and honest reporting about unconnected live integrations.",
+    "steps": [
+      "Open Deployment",
+      "Run scan without a repository",
+      "Enter owner/repository and run scan"
+    ],
+    "expected": "Missing input prompts for a repository; valid format reports validation and provider configuration status without claiming a live push."
+  }
+]
